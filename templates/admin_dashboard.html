@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-6">
+    <!-- Add Course Form -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-lg font-bold mb-4 text-gray-800">Add New Course</h3>
+        <form action="{{ url_for('add_course') }}" method="POST" class="flex flex-wrap gap-4">
+            <input type="text" name="course_code" placeholder="Course Code (e.g., BSIT-101)" required class="border p-2 rounded w-full md:w-1/4">
+            <input type="text" name="course_name" placeholder="Course Title" required class="border p-2 rounded w-full md:w-2/5">
+            <input type="number" name="capacity" placeholder="Capacity" required class="border p-2 rounded w-full md:w-1/6">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add Course</button>
+        </form>
+    </div>
+
+    <!-- Enrollment Approval Management -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-lg font-bold mb-4 text-gray-800">Enrollment Requests</h3>
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-sm">
+                    <th class="p-2 border">Student Name</th>
+                    <th class="p-2 border">Course</th>
+                    <th class="p-2 border">Status</th>
+                    <th class="p-2 border">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in enrollments %}
+                <tr class="text-sm">
+                    <td class="p-2 border">{{ item.full_name }}</td>
+                    <td class="p-2 border"><b>{{ item.course_code }}</b> - {{ item.course_name }}</td>
+                    <td class="p-2 border">{{ item.status }}</td>
+                    <td class="p-2 border flex gap-2">
+                        <form action="{{ url_for('manage_enrollment', enrollment_id=item.id, action='Approved') }}" method="POST">
+                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white text-xs px-2 py-1 rounded">Approve</button>
+                        </form>
+                        <form action="{{ url_for('manage_enrollment', enrollment_id=item.id, action='Rejected') }}" method="POST">
+                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="p-4 text-center text-gray-500">No enrollment requests submitted.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

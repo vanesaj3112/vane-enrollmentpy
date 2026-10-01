@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Available Courses</h3>
+        <ul class="divide-y divide-gray-200">
+            {% for course in courses %}
+            <li class="py-3 flex justify-between items-center">
+                <div>
+                    <span class="font-bold text-blue-900">{{ course.course_code }}</span> - {{ course.course_name }}
+                    <div class="text-xs text-gray-500">Capacity: {{ course.capacity }}</div>
+                </div>
+                <form action="{{ url_for('enroll', course_id=course.id) }}" method="POST">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded">Enroll</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">My Enrollment Status</h3>
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-sm">
+                    <th class="p-2 border">Code</th>
+                    <th class="p-2 border">Course Name</th>
+                    <th class="p-2 border">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for enrollment in enrollments %}
+                <tr class="text-sm">
+                    <td class="p-2 border font-bold">{{ enrollment.course_code }}</td>
+                    <td class="p-2 border">{{ enrollment.course_name }}</td>
+                    <td class="p-2 border">
+                        <span class="px-2 py-1 rounded text-xs text-white 
+                            {% if enrollment.status == 'Approved' %}bg-green-500
+                            {% elif enrollment.status == 'Rejected' %}bg-red-500
+                            {% else %}bg-yellow-500{% endif %}">
+                            {{ enrollment.status }}
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="p-4 text-center text-gray-500">No enrollments submitted yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

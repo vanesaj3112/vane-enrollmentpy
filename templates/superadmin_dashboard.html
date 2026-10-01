@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Create Admin Form -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Create Staff/Admin Account</h3>
+        <form action="{{ url_for('create_admin') }}" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold">Username / Staff ID</label>
+                <input type="text" name="username" required class="w-full border p-2 rounded mt-1">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold">Full Name</label>
+                <input type="text" name="full_name" required class="w-full border p-2 rounded mt-1">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold">Password</label>
+                <input type="password" name="password" required class="w-full border p-2 rounded mt-1">
+            </div>
+            <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800 transition">Create Admin</button>
+        </form>
+    </div>
+
+    <!-- Manage System Users -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">System Users Control</h3>
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-sm">
+                    <th class="p-2 border">Username</th>
+                    <th class="p-2 border">Full Name</th>
+                    <th class="p-2 border">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr class="text-sm">
+                    <td class="p-2 border font-mono">{{ u.username }}</td>
+                    <td class="p-2 border">{{ u.full_name }}</td>
+                    <td class="p-2 border">
+                        <span class="px-2 py-0.5 text-xs rounded text-white {% if u.role == 'admin' %}bg-purple-600{% else %}bg-gray-600{% endif %}">
+                            {{ u.role|capitalize }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a href="{{ url_for('admin_dashboard') }}" class="inline-block bg-gray-700 text-white text-sm px-3 py-2 rounded hover:bg-gray-800">Go to Admin View</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACC Enrollment System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-900 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wide">Abuyog Community College (ACC)</h1>
+            {% if session.user_id %}
+            <div>
+                <span class="mr-4 text-sm font-semibold text-gray-200">User: {{ session.full_name }} ({{ session.role|capitalize }})</span>
+                <a href="{{ url_for('logout') }}" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition">Logout</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded text-white {% if category == 'danger' %}bg-red-500{% elif category == 'success' %}bg-green-500{% elif category == 'warning' %}bg-yellow-500{% else %}bg-blue-500{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
